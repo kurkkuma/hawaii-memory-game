@@ -10,7 +10,7 @@
   font-weight: 400;
   font-style: normal;
   color: white;
-  background-image: url("images/bg-img-desktop.jpg");
+  background-image: url("../public/images/bg-img-desktop.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -22,13 +22,15 @@
 
 @media (max-width: 1024px) {
   :root {
-    background-image: url("images/bg-img-tablet.jpg");
+    background-image: url("../public/images/bg-img-tablet.jpg");
+
     font-size: 14px;
   }
 }
 @media (max-width: 625px) {
   :root {
-    background-image: url("images/bg-img-mobile.jpg");
+    background-image: url("../public/images/bg-img-mobile.jpg");
+
     font-size: 12px;
   }
 }
