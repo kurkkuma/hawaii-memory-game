@@ -1,5 +1,5 @@
 import "./game.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import cardImages from "../../../data.ts";
 import Card from "./card/Card.tsx";
 
@@ -58,6 +58,10 @@ function Game() {
     setDisabled(false);
   };
 
+  const startGame = () => {
+    shuffleCards(value / 2);
+  };
+
   useEffect(() => {
     if (choiceOne && choiceTwo) {
       setDisabled(true);
@@ -79,7 +83,11 @@ function Game() {
   }, [choiceOne, choiceTwo]);
 
   useEffect(() => {
-    shuffleCards(value / 2);
+    startGame();
+  }, [size]);
+
+  useEffect(() => {
+    startGame();
   }, []);
 
   return (
@@ -100,7 +108,7 @@ function Game() {
           );
         })}
       </div>
-      <button onClick={() => shuffleCards(value / 2)} className="btn-new-game">
+      <button onClick={() => startGame()} className="btn-new-game">
         🌺 New Game 🌺
       </button>
 
