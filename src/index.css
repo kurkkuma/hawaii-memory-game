@@ -34,3 +34,15 @@
     font-size: 12px;
   }
 }
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 0px;
+}

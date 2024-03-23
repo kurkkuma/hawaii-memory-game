@@ -39,7 +39,7 @@
 
 @media (max-width: 625px) {
   .navbar-container {
-    padding: 0.5rem 1rem;
+    padding: 1rem;
   }
   .user-container {
     gap: 1rem;

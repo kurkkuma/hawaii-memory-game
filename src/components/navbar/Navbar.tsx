@@ -29,6 +29,15 @@ function Navbar() {
     }
   };
 
+  const handleEnded = () => {
+    if (audioElem.current) {
+      audioElem.current.currentTime = 0;
+      if (isPlaying) {
+        audioElem.current.play();
+      }
+    }
+  };
+
   useEffect(() => {
     if (isPlaying) {
       audioElem.current?.play();
@@ -40,7 +49,7 @@ function Navbar() {
   return (
     <header className="navbar-container">
       <div className="music-container">
-        <audio ref={audioElem} src={currentSong}></audio>
+        <audio ref={audioElem} src={currentSong} onEnded={handleEnded}></audio>
         <img
           className="music-icon"
           src="images/icons/music.png"

@@ -1,0 +1,59 @@
+.game-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+.btn-new-game {
+  border: none;
+  color: white;
+  background-color: rgba(54, 89, 137, 0.51);
+  border-radius: 5px;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+.btn-new-game:hover {
+  transform: scale(1.08);
+}
+.btn-new-game:active {
+  transform: scale(1);
+}
+.sizes {
+  margin-top: 1rem;
+  display: flex;
+  gap: 2rem;
+}
+.sizes div {
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 0.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+.sizes div.active {
+  background: rgba(255, 255, 255, 0.26);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.7px);
+  -webkit-backdrop-filter: blur(8.7px);
+}
+.sizes div:hover {
+  background: rgba(255, 255, 255, 0.26);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.7px);
+  -webkit-backdrop-filter: blur(8.7px);
+}
+
+.card-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+@media (max-width: 625px) {
+  .sizes div {
+    padding: 0.5rem;
+  }
+}
