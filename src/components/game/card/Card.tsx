@@ -16,6 +16,9 @@ function Card({ item, value, handleChoice, flipped, disabled }: CardProps) {
     }
   };
 
+  const width = value === 16 ? "7em" : value === 24 ? "5em" : "5em";
+  const height = value === 16 ? "7em" : value === 24 ? "5em" : "5em";
+
   return (
     <div className="card" key={item.id}>
       <div className={flipped ? "flipped" : ""}>
@@ -24,8 +27,8 @@ function Card({ item, value, handleChoice, flipped, disabled }: CardProps) {
           src={item.src}
           alt={`card front ${item.src}`}
           style={{
-            width: value === 16 ? "7rem" : value === 24 ? "6rem" : "5rem",
-            height: value === 16 ? "7rem" : value === 24 ? "6rem" : "5rem",
+            width: width,
+            height: height,
           }}
         />
         <img
@@ -34,8 +37,8 @@ function Card({ item, value, handleChoice, flipped, disabled }: CardProps) {
           src="images/cards/cover.JPEG"
           alt="card back"
           style={{
-            width: value === 16 ? "7em" : value === 24 ? "5em" : "5em",
-            height: value === 16 ? "7em" : value === 24 ? "5em" : "5em",
+            width: width,
+            height: height,
           }}
         />
       </div>
