@@ -14,16 +14,16 @@
 .card .front {
   transform: rotateY(90deg);
   position: absolute;
-  transition: all 0.15s ease-in;
+  transition: all 0.2s ease-in;
 }
 .flipped .front {
   transform: rotateY(0deg);
-  transition-delay: 0.15s;
+  transition-delay: 0.2s;
 }
 
 .card .back {
   transition: all 0.2s ease-in;
-  transition-delay: 0.15s;
+  transition-delay: 0.2s;
 }
 .flipped .back {
   transform: rotateY(90deg);

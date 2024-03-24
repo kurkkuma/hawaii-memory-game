@@ -6,10 +6,10 @@ import Card from "./card/Card.tsx";
 export type CardType = {
   src: string;
   matched: boolean;
-  id: number;
+  id?: number;
 };
 
-function Game() {
+function Game({ setWon }: any) {
   const sizes = [
     {
       size: "4x4",
@@ -43,6 +43,7 @@ function Game() {
         id: index,
       }));
 
+    setWon(false);
     setChoiceOne(null);
     setChoiceTwo(null);
     setCards(shuffledCards);
@@ -77,9 +78,17 @@ function Game() {
         });
         resetTurn();
       } else {
-        setTimeout(() => resetTurn(), 700);
+        setTimeout(() => resetTurn(), 1000);
       }
     }
+  }, [choiceOne, choiceTwo]);
+
+  useEffect(() => {
+    const allMatched = cards.every((item) => item.matched === true);
+    if (allMatched) {
+      setWon(true);
+    }
+    console.log(allMatched);
   }, [choiceOne, choiceTwo]);
 
   useEffect(() => {

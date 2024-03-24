@@ -20,6 +20,12 @@
   -webkit-background-size: cover;
 }
 
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @media (max-width: 1024px) {
   :root {
     background-image: url("../public/images/bg-img-tablet.jpg");
