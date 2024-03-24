@@ -34,8 +34,8 @@ function Card({ item, value, handleChoice, flipped, disabled }: CardProps) {
           src="images/cards/cover.JPEG"
           alt="card back"
           style={{
-            width: value === 16 ? "7rem" : value === 24 ? "6rem" : "5rem",
-            height: value === 16 ? "7rem" : value === 24 ? "6rem" : "5rem",
+            width: value === 16 ? "7em" : value === 24 ? "5em" : "5em",
+            height: value === 16 ? "7em" : value === 24 ? "5em" : "5em",
           }}
         />
       </div>

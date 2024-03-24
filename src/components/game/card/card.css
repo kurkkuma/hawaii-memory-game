@@ -1,6 +1,7 @@
 .card {
   position: relative;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .card img {
@@ -28,4 +29,20 @@
 .flipped .back {
   transform: rotateY(90deg);
   transition-delay: 0s;
+}
+
+@media (max-width: 768px) {
+  .card {
+    font-size: 12px;
+  }
+}
+@media (max-width: 550px) {
+  .card {
+    font-size: 10px;
+  }
+}
+@media (max-width: 355px) {
+  .card {
+    font-size: 8px;
+  }
 }

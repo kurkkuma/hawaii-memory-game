@@ -88,7 +88,6 @@ function Game({ setWon }: any) {
     if (allMatched) {
       setWon(true);
     }
-    console.log(allMatched);
   }, [choiceOne, choiceTwo]);
 
   useEffect(() => {

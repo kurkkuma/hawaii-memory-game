@@ -57,3 +57,14 @@
     padding: 0.5rem;
   }
 }
+
+@media (max-width: 768px) {
+  .card-grid {
+    gap: 0.7rem;
+  }
+}
+@media (max-width: 550px) {
+  .card-grid {
+    gap: 0.5rem;
+  }
+}
