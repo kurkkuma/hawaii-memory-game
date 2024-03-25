@@ -1,0 +1,31 @@
+{
+  "hash": "17b7622e",
+  "configHash": "f4a5d875",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "bdeaf68f",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "e44ea462",
+      "needsInterop": true
+    },
+    "react-confetti": {
+      "src": "../../node_modules/react-confetti/dist/react-confetti.min.js",
+      "file": "react-confetti.js",
+      "fileHash": "fb5306be",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "b6b743f3",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-XFZ2DVVZ": {
+      "file": "chunk-XFZ2DVVZ.js"
+    }
+  }
+}
