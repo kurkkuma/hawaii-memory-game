@@ -10,6 +10,14 @@
   align-items: center;
   gap: 1.5rem;
 }
+.change-nickname {
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 0.2rem 0.5rem;
+  color: white;
+  font-size: 1rem;
+  background-color: transparent;
+}
 
 @media (max-width: 625px) {
   .navbar-container {
@@ -17,5 +25,15 @@
   }
   .user-container {
     gap: 1rem;
+  }
+}
+@media (max-width: 425px) {
+  .change-nickname {
+    width: 10rem;
+  }
+}
+@media (max-width: 375px) {
+  .change-nickname {
+    width: 7rem;
   }
 }

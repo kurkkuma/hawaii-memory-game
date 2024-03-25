@@ -1,7 +1,10 @@
 import "./game.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import cardImages from "../../../data.ts";
 import Card from "./card/Card.tsx";
+import { AppContext } from "../../App.tsx";
+
+import { UserType } from "../../App.tsx";
 
 export type CardType = {
   src: string;
@@ -9,7 +12,9 @@ export type CardType = {
   id?: number;
 };
 
-function Game({ setWon }: any) {
+function Game() {
+  const { user, setUser, won, setWon } = useContext(AppContext);
+
   const sizes = [
     {
       size: "4x4",
@@ -30,7 +35,6 @@ function Game({ setWon }: any) {
   const [choiceOne, setChoiceOne] = useState<CardType | null>(null);
   const [choiceTwo, setChoiceTwo] = useState<CardType | null>(null);
   const [disabled, setDisabled] = useState(false);
-  const [level, setLevel] = useState<number>(0);
 
   const shuffleCards = (count: number) => {
     const updatedCards = cardImages
@@ -88,13 +92,33 @@ function Game({ setWon }: any) {
     const allMatched = cards.every((item) => item.matched === true);
     if (allMatched) {
       setWon(true);
-      setLevel((prev) => prev + 1);
     }
   }, [choiceOne, choiceTwo]);
 
   useEffect(() => {
     startGame();
   }, [size]);
+
+  useEffect(() => {
+    if (won) {
+      const levelsCompletedStr = localStorage.getItem("levelsCompleted");
+
+      if (levelsCompletedStr) {
+        const levelsCompleted = parseInt(levelsCompletedStr);
+        if (!isNaN(levelsCompleted)) {
+          localStorage.setItem(
+            "levelsCompleted",
+            (levelsCompleted + 1).toString()
+          );
+
+          setUser((prev: UserType) => ({
+            ...prev,
+            levelsCompleted: levelsCompleted + 1,
+          }));
+        }
+      }
+    }
+  }, [won]);
 
   useEffect(() => {
     startGame();
@@ -122,7 +146,7 @@ function Game({ setWon }: any) {
         <button onClick={() => startGame()} className="btn-new-game">
           🌺 New Game 🌺
         </button>
-        <p className="game-level">Level: {level}</p>
+        <p className="game-level">Levels completed: {user.levelsCompleted}</p>
       </div>
 
       <div

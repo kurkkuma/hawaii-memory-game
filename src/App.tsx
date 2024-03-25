@@ -6,23 +6,35 @@ import Loader from "./components/loader/Loader";
 import Confetti from "react-confetti";
 
 import cardImages from "../data.ts";
+
+export type UserType = {
+  nickname: string;
+  levelsCompleted: string;
+};
 interface UserContextType {
-  user: string;
+  user: UserType;
+  won: boolean;
   setUser: any;
+  setWon: any;
 }
 
 // Создание контекста
 export const AppContext = createContext<UserContextType>({
-  user: "",
+  user: { nickname: "", levelsCompleted: "0" },
+  won: false,
   setUser: () => {},
+  setWon: () => {},
 });
 
 function App() {
-  const [user, setUser] = useState(generateUniqueNickname());
+  const [user, setUser] = useState<UserType>({
+    nickname: getNickname(),
+    levelsCompleted: getLevelsCompleted(),
+  });
   const [won, setWon] = useState(false);
   const [imgsLoaded, setImgsLoaded] = useState(false);
 
-  function generateUniqueNickname() {
+  function getNickname() {
     let nickname = localStorage.getItem("nickname");
 
     if (!nickname) {
@@ -32,6 +44,18 @@ function App() {
     }
 
     return nickname;
+  }
+
+  function getLevelsCompleted() {
+    let levels = localStorage.getItem("levelsCompleted");
+
+    if (!levels) {
+      levels = "0";
+      localStorage.setItem("levelsCompleted", levels);
+      return levels;
+    }
+
+    return levels;
   }
 
   useEffect(() => {
@@ -57,10 +81,10 @@ function App() {
   }, []);
 
   return (
-    <AppContext.Provider value={{ user, setUser }}>
+    <AppContext.Provider value={{ user, won, setUser, setWon }}>
       <div className="main-container">
         <Navbar />
-        {imgsLoaded ? <Game setWon={setWon} /> : <Loader />}
+        {imgsLoaded ? <Game /> : <Loader />}
         {won && (
           <Confetti width={window.innerWidth} height={window.innerHeight} />
         )}

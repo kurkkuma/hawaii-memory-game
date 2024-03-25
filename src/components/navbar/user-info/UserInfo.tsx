@@ -1,12 +1,21 @@
 import "./userInfo.css";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../../App";
 
+import { UserType } from "../../../App";
+
 function UserInfo() {
-  const { user } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
+  const [isChanging, setIsChanging] = useState(false);
+  const [newNickname, setNewNickname] = useState<string>(user.nickname);
 
   const handleChangeNickname = () => {
-    console.log("change change");
+    if (newNickname.trim().length > 0) {
+      localStorage.setItem("nickname", newNickname);
+      setUser((prev: UserType) => ({ ...prev, nickname: newNickname }));
+    }
+
+    setIsChanging(false);
   };
 
   return (
@@ -17,13 +26,33 @@ function UserInfo() {
           src="images/icons/user.png"
           alt="user icon"
         />
-        <p className="user-name">{user}</p>
-        <img
-          onClick={handleChangeNickname}
-          className="pencil-icon"
-          src="images/icons/pencil.png"
-          alt="edit user name"
-        />
+        {isChanging ? (
+          <input
+            className="change-nickname"
+            type="text"
+            value={newNickname}
+            onChange={(e) => setNewNickname(e.target.value)}
+          />
+        ) : (
+          <p className="user-name">{user.nickname}</p>
+        )}
+        {isChanging ? (
+          <img
+            onClick={handleChangeNickname}
+            className="check-mark"
+            src="images/icons/check-mark.png"
+            alt="save the changed nickname icon"
+          />
+        ) : (
+          <img
+            onClick={() => {
+              setIsChanging(true);
+            }}
+            className="pencil-icon"
+            src="images/icons/pencil.png"
+            alt="edit user name"
+          />
+        )}
       </div>
       <img
         className="cup-icon"
