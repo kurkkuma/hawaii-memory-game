@@ -1,0 +1,10 @@
+.music-container {
+  position: relative;
+}
+.cross-icon {
+  position: absolute;
+  left: 0px;
+}
+.next-icon {
+  margin-left: 1rem;
+}

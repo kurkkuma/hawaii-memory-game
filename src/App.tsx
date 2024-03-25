@@ -1,15 +1,38 @@
+import "./index.css";
+import { useEffect, useState, createContext } from "react";
 import Navbar from "./components/navbar/Navbar";
 import Game from "./components/game/Game";
 import Loader from "./components/loader/Loader";
 import Confetti from "react-confetti";
-import "./index.css";
-import { useEffect, useState } from "react";
 
 import cardImages from "../data.ts";
+interface UserContextType {
+  user: string;
+  setUser: any;
+}
+
+// Создание контекста
+export const AppContext = createContext<UserContextType>({
+  user: "",
+  setUser: () => {},
+});
 
 function App() {
+  const [user, setUser] = useState(generateUniqueNickname());
   const [won, setWon] = useState(false);
   const [imgsLoaded, setImgsLoaded] = useState(false);
+
+  function generateUniqueNickname() {
+    let nickname = localStorage.getItem("nickname");
+
+    if (!nickname) {
+      nickname = "user" + Math.floor(Math.random() * 999999).toString();
+      localStorage.setItem("nickname", nickname);
+      return nickname;
+    }
+
+    return nickname;
+  }
 
   useEffect(() => {
     const loadImage = (image: any) => {
@@ -34,13 +57,15 @@ function App() {
   }, []);
 
   return (
-    <div className="main-container">
-      <Navbar />
-      {imgsLoaded ? <Game setWon={setWon} /> : <Loader />}
-      {won && (
-        <Confetti width={window.innerWidth} height={window.innerHeight} />
-      )}
-    </div>
+    <AppContext.Provider value={{ user, setUser }}>
+      <div className="main-container">
+        <Navbar />
+        {imgsLoaded ? <Game setWon={setWon} /> : <Loader />}
+        {won && (
+          <Confetti width={window.innerWidth} height={window.innerHeight} />
+        )}
+      </div>
+    </AppContext.Provider>
   );
 }
 

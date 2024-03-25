@@ -16,8 +16,8 @@ function Card({ item, value, handleChoice, flipped, disabled }: CardProps) {
     }
   };
 
-  const width = value === 16 ? "7em" : value === 24 ? "5em" : "5em";
-  const height = value === 16 ? "7em" : value === 24 ? "5em" : "5em";
+  const width = value === 16 ? "7em" : value === 20 ? "6.5em" : "5em";
+  const height = value === 16 ? "7em" : value === 20 ? "6.5em" : "5em";
 
   return (
     <div className="card" key={item.id}>

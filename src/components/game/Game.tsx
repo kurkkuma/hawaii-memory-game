@@ -16,8 +16,8 @@ function Game({ setWon }: any) {
       value: 16,
     },
     {
-      size: "6x4",
-      value: 24,
+      size: "5x4",
+      value: 20,
     },
     {
       size: "6x5",
@@ -30,6 +30,7 @@ function Game({ setWon }: any) {
   const [choiceOne, setChoiceOne] = useState<CardType | null>(null);
   const [choiceTwo, setChoiceTwo] = useState<CardType | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const [level, setLevel] = useState<number>(0);
 
   const shuffleCards = (count: number) => {
     const updatedCards = cardImages
@@ -87,6 +88,7 @@ function Game({ setWon }: any) {
     const allMatched = cards.every((item) => item.matched === true);
     if (allMatched) {
       setWon(true);
+      setLevel((prev) => prev + 1);
     }
   }, [choiceOne, choiceTwo]);
 
@@ -100,25 +102,28 @@ function Game({ setWon }: any) {
 
   return (
     <div className="game-container">
-      <div className="sizes">
-        {sizes.map((item) => {
-          return (
-            <div
-              className={item.value === value ? "active" : ""}
-              key={item.value}
-              onClick={() => {
-                setValue(item.value);
-                setSize(item.size);
-              }}
-            >
-              {item.size}
-            </div>
-          );
-        })}
+      <div className="game-info">
+        <div className="sizes">
+          {sizes.map((item) => {
+            return (
+              <div
+                className={item.value === value ? "active" : ""}
+                key={item.value}
+                onClick={() => {
+                  setValue(item.value);
+                  setSize(item.size);
+                }}
+              >
+                {item.size}
+              </div>
+            );
+          })}
+        </div>
+        <button onClick={() => startGame()} className="btn-new-game">
+          🌺 New Game 🌺
+        </button>
+        <p className="game-level">Level: {level}</p>
       </div>
-      <button onClick={() => startGame()} className="btn-new-game">
-        🌺 New Game 🌺
-      </button>
 
       <div
         className="card-grid"
