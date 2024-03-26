@@ -5,14 +5,21 @@ import { AppContext } from "../../../App";
 import { UserType } from "../../../App";
 
 function UserInfo() {
-  const { user, setUser } = useContext(AppContext);
+  const { user, setUser, updateUserDataDB } = useContext(AppContext);
   const [isChanging, setIsChanging] = useState(false);
   const [newNickname, setNewNickname] = useState<string>(user.nickname);
 
   const handleChangeNickname = () => {
-    if (newNickname.trim().length > 0) {
+    if (
+      newNickname.trim().length > 0 &&
+      newNickname.trim() !== user.nickname.trim()
+    ) {
       localStorage.setItem("nickname", newNickname);
-      setUser((prev: UserType) => ({ ...prev, nickname: newNickname }));
+      setUser((prev: UserType) => {
+        const updatedUser = { ...prev, nickname: newNickname };
+        updateUserDataDB(updatedUser);
+        return updatedUser;
+      });
     }
 
     setIsChanging(false);

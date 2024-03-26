@@ -13,7 +13,7 @@ export type CardType = {
 };
 
 function Game() {
-  const { user, setUser, won, setWon } = useContext(AppContext);
+  const { user, won, setUser, setWon } = useContext(AppContext);
 
   const sizes = [
     {
@@ -68,6 +68,20 @@ function Game() {
     shuffleCards(value / 2);
   };
 
+  const handleChangeLevelsCompleted = () => {
+    const levelsCompletedStr = localStorage.getItem("levelsCompleted");
+
+    if (levelsCompletedStr) {
+      const levelsCompleted = (parseInt(levelsCompletedStr) + 1).toString();
+
+      localStorage.setItem("levelsCompleted", levelsCompleted);
+
+      setUser((prev: UserType) => {
+        return { ...prev, levelsCompleted: levelsCompleted };
+      });
+    }
+  };
+
   useEffect(() => {
     if (choiceOne && choiceTwo) {
       setDisabled(true);
@@ -89,36 +103,19 @@ function Game() {
   }, [choiceOne, choiceTwo]);
 
   useEffect(() => {
-    const allMatched = cards.every((item) => item.matched === true);
-    if (allMatched) {
-      setWon(true);
+    if (cards.length > 0) {
+      const allMatched = cards.every((item) => item.matched === true);
+
+      if (allMatched && !won) {
+        setWon(true);
+        handleChangeLevelsCompleted();
+      }
     }
-  }, [choiceOne, choiceTwo]);
+  }, [cards, choiceTwo, won]);
 
   useEffect(() => {
     startGame();
   }, [size]);
-
-  useEffect(() => {
-    if (won) {
-      const levelsCompletedStr = localStorage.getItem("levelsCompleted");
-
-      if (levelsCompletedStr) {
-        const levelsCompleted = parseInt(levelsCompletedStr);
-        if (!isNaN(levelsCompleted)) {
-          localStorage.setItem(
-            "levelsCompleted",
-            (levelsCompleted + 1).toString()
-          );
-
-          setUser((prev: UserType) => ({
-            ...prev,
-            levelsCompleted: levelsCompleted + 1,
-          }));
-        }
-      }
-    }
-  }, [won]);
 
   useEffect(() => {
     startGame();

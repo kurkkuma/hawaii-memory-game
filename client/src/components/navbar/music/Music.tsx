@@ -10,7 +10,7 @@ const music = [
 
 function Music() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSong, setCurrentSong] = useState(music[1]);
+  const [currentSong, setCurrentSong] = useState(music[0]);
   const audioElem = useRef<HTMLAudioElement | null>(null);
 
   const changeVolume = () => {

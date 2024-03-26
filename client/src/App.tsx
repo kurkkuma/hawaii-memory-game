@@ -16,6 +16,7 @@ interface UserContextType {
   won: boolean;
   setUser: any;
   setWon: any;
+  updateUserDataDB: any;
 }
 
 // Создание контекста
@@ -24,6 +25,7 @@ export const AppContext = createContext<UserContextType>({
   won: false,
   setUser: () => {},
   setWon: () => {},
+  updateUserDataDB: () => {},
 });
 
 function App() {
@@ -58,6 +60,32 @@ function App() {
     return levels;
   }
 
+  const updateUserDataDB = (updatedUser: UserType) => {
+    fetch("http://localhost:8080/add-user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedUser),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Server data: ", data);
+      })
+      .catch((error) => {
+        console.error("There was an error with the fetch operation:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (won) {
+      updateUserDataDB(user);
+    }
+  }, [won]);
+
   useEffect(() => {
     const loadImage = (image: any) => {
       return new Promise((resolve, reject) => {
@@ -81,7 +109,9 @@ function App() {
   }, []);
 
   return (
-    <AppContext.Provider value={{ user, won, setUser, setWon }}>
+    <AppContext.Provider
+      value={{ user, won, setUser, setWon, updateUserDataDB }}
+    >
       <div className="main-container">
         <Navbar />
         {imgsLoaded ? <Game /> : <Loader />}
