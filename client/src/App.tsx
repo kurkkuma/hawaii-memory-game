@@ -1,5 +1,6 @@
 import "./index.css";
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, useRef } from "react";
+import axios from "axios";
 import Navbar from "./components/navbar/Navbar";
 import Game from "./components/game/Game";
 import Loader from "./components/loader/Loader";
@@ -8,6 +9,7 @@ import Confetti from "react-confetti";
 import cardImages from "../data.ts";
 
 export type UserType = {
+  id: number;
   nickname: string;
   levelsCompleted: string;
 };
@@ -21,7 +23,7 @@ interface UserContextType {
 
 // Создание контекста
 export const AppContext = createContext<UserContextType>({
-  user: { nickname: "", levelsCompleted: "0" },
+  user: { id: 0, nickname: "", levelsCompleted: "0" },
   won: false,
   setUser: () => {},
   setWon: () => {},
@@ -30,82 +32,92 @@ export const AppContext = createContext<UserContextType>({
 
 function App() {
   const [user, setUser] = useState<UserType>({
-    nickname: getNickname(),
-    levelsCompleted: getLevelsCompleted(),
+    id: 0,
+    nickname: "",
+    levelsCompleted: "",
   });
   const [won, setWon] = useState(false);
   const [imgsLoaded, setImgsLoaded] = useState(false);
+  const effectRan = useRef(false);
 
-  function getNickname() {
-    let nickname = localStorage.getItem("nickname");
-
-    if (!nickname) {
-      nickname = "user" + Math.floor(Math.random() * 999999).toString();
-      localStorage.setItem("nickname", nickname);
-      return nickname;
-    }
-
+  function createNickname() {
+    const nickname = "user" + Math.floor(Math.random() * 999999).toString();
     return nickname;
   }
 
-  function getLevelsCompleted() {
-    let levels = localStorage.getItem("levelsCompleted");
-
-    if (!levels) {
-      levels = "0";
-      localStorage.setItem("levelsCompleted", levels);
-      return levels;
-    }
-
-    return levels;
-  }
-
-  const updateUserDataDB = (updatedUser: UserType) => {
-    fetch("http://localhost:8080/add-user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedUser),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Server data: ", data);
-      })
-      .catch((error) => {
-        console.error("There was an error with the fetch operation:", error);
+  const updateUserDataDB = async (updatedUser: UserType) => {
+    try {
+      const res = await axios.post("http://localhost:8080/update-user", {
+        id: updatedUser.id,
+        nickname: updatedUser.nickname,
+        levelsCompleted: updatedUser.levelsCompleted,
       });
+
+      if (res.status === 200) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+      }
+    } catch (err) {
+      console.error("Error: ", err);
+      throw err;
+    }
   };
 
-  useEffect(() => {
-    if (won) {
-      updateUserDataDB(user);
-    }
-  }, [won]);
-
-  useEffect(() => {
-    const loadImage = (image: any) => {
-      return new Promise((resolve, reject) => {
-        const loadImg = new Image();
-        loadImg.src = image.src;
-        loadImg.onload = () =>
-          setTimeout(() => {
-            resolve(image.src);
-          }, 1500);
-
-        loadImg.onerror = (err) => {
-          console.log("Error loading image:", err);
-          reject(err);
-        };
+  const createUserDataDB = async (nickname: string) => {
+    try {
+      const res = await axios.post("http://localhost:8080/create-user", {
+        nickname,
       });
-    };
+      return res.data;
+    } catch (err) {
+      console.error("Error: ", err);
+      throw err;
+    }
+  };
 
-    Promise.all(cardImages.map((image: any) => loadImage(image)))
-      .then(() => setImgsLoaded(true))
-      .catch((err) => console.log("Failed to load images", err));
+  async function getUser() {
+    const existedUser = localStorage.getItem("user");
+
+    if (!existedUser) {
+      const dataFromDB = await createUserDataDB(createNickname());
+      localStorage.setItem("user", JSON.stringify(dataFromDB));
+      setUser(dataFromDB);
+      return;
+    }
+
+    const parsedUser = JSON.parse(existedUser);
+    setUser(parsedUser);
+    return;
+  }
+
+  useEffect(() => {
+    if (effectRan.current === false) {
+      const loadImage = (image: any) => {
+        return new Promise((resolve, reject) => {
+          const loadImg = new Image();
+          loadImg.src = image.src;
+          loadImg.onload = () =>
+            setTimeout(() => {
+              resolve(image.src);
+            }, 1500);
+
+          loadImg.onerror = (err) => {
+            console.log("Error loading image:", err);
+            reject(err);
+          };
+        });
+      };
+
+      Promise.all(cardImages.map((image: any) => loadImage(image)))
+        .then(() => setImgsLoaded(true))
+        .catch((err) => console.log("Failed to load images", err));
+
+      if (user.id === 0 && !user.nickname && !user.levelsCompleted) {
+        getUser();
+      }
+      return () => {
+        effectRan.current = true;
+      };
+    }
   }, []);
 
   return (

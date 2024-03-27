@@ -1,5 +1,5 @@
 import "./userInfo.css";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../App";
 
 import { UserType } from "../../../App";
@@ -14,7 +14,6 @@ function UserInfo() {
       newNickname.trim().length > 0 &&
       newNickname.trim() !== user.nickname.trim()
     ) {
-      localStorage.setItem("nickname", newNickname);
       setUser((prev: UserType) => {
         const updatedUser = { ...prev, nickname: newNickname };
         updateUserDataDB(updatedUser);
@@ -24,6 +23,10 @@ function UserInfo() {
 
     setIsChanging(false);
   };
+
+  useEffect(() => {
+    setNewNickname(user.nickname);
+  }, [user]);
 
   return (
     <div className="user-rating-container">

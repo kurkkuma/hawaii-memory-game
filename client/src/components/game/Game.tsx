@@ -13,12 +13,13 @@ export type CardType = {
 };
 
 function Game() {
-  const { user, won, setUser, setWon } = useContext(AppContext);
+  const { user, won, setUser, setWon, updateUserDataDB } =
+    useContext(AppContext);
 
   const sizes = [
     {
-      size: "4x4",
-      value: 16,
+      size: "2x2",
+      value: 4,
     },
     {
       size: "5x4",
@@ -69,15 +70,16 @@ function Game() {
   };
 
   const handleChangeLevelsCompleted = () => {
-    const levelsCompletedStr = localStorage.getItem("levelsCompleted");
+    const levelsCompletedStr = user.levelsCompleted;
 
     if (levelsCompletedStr) {
       const levelsCompleted = (parseInt(levelsCompletedStr) + 1).toString();
 
-      localStorage.setItem("levelsCompleted", levelsCompleted);
-
       setUser((prev: UserType) => {
-        return { ...prev, levelsCompleted: levelsCompleted };
+        const updatedUser = { ...prev, levelsCompleted: levelsCompleted };
+        updateUserDataDB(updatedUser);
+
+        return updatedUser;
       });
     }
   };
