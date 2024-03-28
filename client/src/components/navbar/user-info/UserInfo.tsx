@@ -1,7 +1,6 @@
 import "./userInfo.css";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../App";
-import { UserType } from "../../../App";
 
 function UserInfo() {
   const { user, setUser, updateUserDataDB } = useContext(AppContext);
