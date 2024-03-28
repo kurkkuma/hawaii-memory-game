@@ -23,6 +23,8 @@ function UserInfo() {
       } else {
         setError("That nickname is already taken.");
       }
+    } else if (newNickname.trim() === user.nickname) {
+      setIsChanging(false);
     }
   };
 
