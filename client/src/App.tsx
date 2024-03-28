@@ -39,6 +39,7 @@ function App() {
   const [won, setWon] = useState(false);
   const [imgsLoaded, setImgsLoaded] = useState(false);
   const effectRan = useRef(false);
+  const baseURL = "https://hawaii-memory-game.onrender.com";
 
   function createNickname() {
     const nickname = "user" + Math.floor(Math.random() * 999999).toString();
@@ -47,7 +48,7 @@ function App() {
 
   const updateUserDataDB = async (updatedUser: UserType) => {
     try {
-      const res = await axios.post("http://localhost:8080/update-user", {
+      const res = await axios.post(`${baseURL}/update-user`, {
         id: updatedUser.id,
         nickname: updatedUser.nickname,
         levelsCompleted: updatedUser.levelsCompleted,
@@ -68,7 +69,7 @@ function App() {
 
   const createUserDataDB = async (nickname: string) => {
     try {
-      const res = await axios.post("http://localhost:8080/create-user", {
+      const res = await axios.post(`${baseURL}/create-user`, {
         nickname,
       });
       return res.data;
