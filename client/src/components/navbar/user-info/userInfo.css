@@ -18,7 +18,22 @@
   font-size: 1rem;
   background-color: transparent;
 }
-
+.input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.input-container .error {
+  width: 12rem;
+  top: 2rem;
+  margin-right: 1rem;
+  position: absolute;
+  margin-top: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.693);
+  color: rgb(237, 80, 80);
+}
 @media (max-width: 625px) {
   .navbar-container {
     padding: 1rem;
@@ -26,14 +41,11 @@
   .user-container {
     gap: 1rem;
   }
-}
-@media (max-width: 425px) {
-  .change-nickname {
+  .input-container {
     width: 10rem;
   }
-}
-@media (max-width: 375px) {
-  .change-nickname {
-    width: 7rem;
+  .input-container .error {
+    top: 1.6rem;
+    font-size: 0.8rem;
   }
 }

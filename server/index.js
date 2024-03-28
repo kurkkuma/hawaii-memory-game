@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.post("/create-user", async (req, res) => {
   const { nickname } = req.body;
+
   try {
     const newUser = await prisma.user.create({
       data: {
@@ -32,6 +33,20 @@ app.post("/create-user", async (req, res) => {
 
 app.post("/update-user", async (req, res) => {
   const { id, nickname, levelsCompleted } = req.body;
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { nickname: nickname },
+    });
+
+    if (existingUser && existingUser.id !== id) {
+      console.log("Nickname must be unique");
+      return res.status(201).json({ message: "Nickname must be unique" });
+    }
+  } catch (error) {
+    console.error("Error finding user with the same nickname:", error);
+    res.status(500).send("Error finding user with the same nickname");
+  }
 
   try {
     const updatedUser = await prisma.user.update({

@@ -1,27 +1,30 @@
 import "./userInfo.css";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../App";
-
 import { UserType } from "../../../App";
 
 function UserInfo() {
   const { user, setUser, updateUserDataDB } = useContext(AppContext);
   const [isChanging, setIsChanging] = useState(false);
   const [newNickname, setNewNickname] = useState<string>(user.nickname);
+  const [error, setError] = useState<string>("");
 
-  const handleChangeNickname = () => {
+  const handleChangeNickname = async () => {
     if (
       newNickname.trim().length > 0 &&
       newNickname.trim() !== user.nickname.trim()
     ) {
-      setUser((prev: UserType) => {
-        const updatedUser = { ...prev, nickname: newNickname };
-        updateUserDataDB(updatedUser);
-        return updatedUser;
-      });
-    }
+      const updatedUser = { ...user, nickname: newNickname };
 
-    setIsChanging(false);
+      const res = await updateUserDataDB(updatedUser);
+
+      if (res) {
+        setUser(updatedUser);
+        setIsChanging(false);
+      } else {
+        setError("That nickname is already taken.");
+      }
+    }
   };
 
   useEffect(() => {
@@ -37,15 +40,24 @@ function UserInfo() {
           alt="user icon"
         />
         {isChanging ? (
-          <input
-            className="change-nickname"
-            type="text"
-            value={newNickname}
-            onChange={(e) => setNewNickname(e.target.value)}
-          />
+          <div className="input-container">
+            <input
+              className="change-nickname"
+              type="text"
+              value={newNickname}
+              onChange={(e) => {
+                setNewNickname(e.target.value);
+                setError("");
+              }}
+              maxLength={20}
+            />
+
+            {error && <p className="error">{error}</p>}
+          </div>
         ) : (
           <p className="user-name">{user.nickname}</p>
         )}
+
         {isChanging ? (
           <img
             onClick={handleChangeNickname}

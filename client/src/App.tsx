@@ -55,6 +55,10 @@ function App() {
 
       if (res.status === 200) {
         localStorage.setItem("user", JSON.stringify(res.data));
+        return true;
+      }
+      if (res.status === 201) {
+        return false;
       }
     } catch (err) {
       console.error("Error: ", err);
