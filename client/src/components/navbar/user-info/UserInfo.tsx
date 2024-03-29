@@ -3,7 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../App";
 
 function UserInfo() {
-  const { user, setUser, updateUserDataDB } = useContext(AppContext);
+  const { user, setUser, setShowRating, updateUserDataDB } =
+    useContext(AppContext);
   const [isChanging, setIsChanging] = useState(false);
   const [newNickname, setNewNickname] = useState<string>(user.nickname);
   const [error, setError] = useState<string>("");
@@ -78,6 +79,7 @@ function UserInfo() {
         )}
       </div>
       <img
+        onClick={() => setShowRating((prev: boolean) => !prev)}
         className="cup-icon"
         src="images/icons/cup.png"
         alt="open and close rating icon"

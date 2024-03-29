@@ -7,6 +7,7 @@ import Loader from "./components/loader/Loader";
 import Confetti from "react-confetti";
 
 import cardImages from "../data.ts";
+import Rating from "./components/navbar/rating/Rating.tsx";
 
 export type UserType = {
   id: number;
@@ -16,6 +17,8 @@ export type UserType = {
 interface UserContextType {
   user: UserType;
   won: boolean;
+  showRating: boolean;
+  setShowRating: any;
   setUser: any;
   setWon: any;
   updateUserDataDB: any;
@@ -25,6 +28,8 @@ interface UserContextType {
 export const AppContext = createContext<UserContextType>({
   user: { id: 0, nickname: "", levelsCompleted: "0" },
   won: false,
+  showRating: false,
+  setShowRating: () => {},
   setUser: () => {},
   setWon: () => {},
   updateUserDataDB: () => {},
@@ -38,6 +43,7 @@ function App() {
   });
   const [won, setWon] = useState(false);
   const [imgsLoaded, setImgsLoaded] = useState(false);
+  const [showRating, setShowRating] = useState(false);
   const effectRan = useRef(false);
   const baseURL = "https://hawaii-memory-game.onrender.com";
 
@@ -127,9 +133,19 @@ function App() {
 
   return (
     <AppContext.Provider
-      value={{ user, won, setUser, setWon, updateUserDataDB }}
+      value={{
+        user,
+        won,
+        showRating,
+        setUser,
+        setWon,
+        setShowRating,
+        updateUserDataDB,
+      }}
     >
       <div className="main-container">
+        <Rating />
+
         <Navbar />
         {imgsLoaded ? <Game /> : <Loader />}
         {won && (
