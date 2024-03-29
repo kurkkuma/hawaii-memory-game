@@ -2,7 +2,7 @@
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "nickname" TEXT NOT NULL,
-    "levelsCompleted" TEXT NOT NULL,
+    "levelsCompleted" INT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

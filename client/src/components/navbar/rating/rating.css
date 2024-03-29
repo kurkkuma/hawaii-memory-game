@@ -1,18 +1,19 @@
 .rating-container {
   position: absolute;
   top: 0;
-  right: -15rem;
-  width: 12rem;
+  right: -16rem;
+  width: 15rem;
   height: 100vh;
   padding: 4rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #7b81862d;
-  box-shadow: -10px 4px 20px rgba(13, 26, 58, 0.144);
-  backdrop-filter: blur(5.6px);
+  background: #5c96ba70;
+  box-shadow: -5px 4px 10px rgba(14, 24, 53, 0.281);
+  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(5.1px);
   transition: all 0.3s ease-in;
+  z-index: 5;
 }
 .rating-container.active {
   right: 0;
@@ -28,6 +29,22 @@
 }
 .rating-container ul li {
   margin-bottom: 0.8rem;
+}
+.top-user-info {
+  color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.gold-user {
+  color: rgb(249, 216, 154);
+}
+.silver-user {
+  color: rgb(210, 224, 243);
+}
+.copper-user {
+  color: rgb(247, 208, 194);
 }
 
 @media (max-width: 624px) {

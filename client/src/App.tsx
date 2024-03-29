@@ -12,9 +12,10 @@ import Rating from "./components/navbar/rating/Rating.tsx";
 export type UserType = {
   id: number;
   nickname: string;
-  levelsCompleted: string;
+  levelsCompleted: number;
 };
 interface UserContextType {
+  api: any;
   user: UserType;
   won: boolean;
   showRating: boolean;
@@ -24,9 +25,9 @@ interface UserContextType {
   updateUserDataDB: any;
 }
 
-// Создание контекста
 export const AppContext = createContext<UserContextType>({
-  user: { id: 0, nickname: "", levelsCompleted: "0" },
+  api: {},
+  user: { id: 0, nickname: "", levelsCompleted: 0 },
   won: false,
   showRating: false,
   setShowRating: () => {},
@@ -39,13 +40,16 @@ function App() {
   const [user, setUser] = useState<UserType>({
     id: 0,
     nickname: "",
-    levelsCompleted: "",
+    levelsCompleted: 0,
   });
   const [won, setWon] = useState(false);
   const [imgsLoaded, setImgsLoaded] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const effectRan = useRef(false);
-  const baseURL = "https://hawaii-memory-game.onrender.com";
+  const api = axios.create({
+    // baseURL: "https://hawaii-memory-game.onrender.com",
+    baseURL: "http://localhost:8080",
+  });
 
   function createNickname() {
     const nickname = "user" + Math.floor(Math.random() * 999999).toString();
@@ -54,7 +58,7 @@ function App() {
 
   const updateUserDataDB = async (updatedUser: UserType) => {
     try {
-      const res = await axios.post(`${baseURL}/update-user`, {
+      const res = await axios.post(`${api.defaults.baseURL}/update-user`, {
         id: updatedUser.id,
         nickname: updatedUser.nickname,
         levelsCompleted: updatedUser.levelsCompleted,
@@ -75,7 +79,7 @@ function App() {
 
   const createUserDataDB = async (nickname: string) => {
     try {
-      const res = await axios.post(`${baseURL}/create-user`, {
+      const res = await axios.post(`${api.defaults.baseURL}/create-user`, {
         nickname,
       });
       return res.data;
@@ -134,6 +138,7 @@ function App() {
   return (
     <AppContext.Provider
       value={{
+        api,
         user,
         won,
         showRating,

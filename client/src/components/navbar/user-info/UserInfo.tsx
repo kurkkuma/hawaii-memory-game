@@ -51,7 +51,7 @@ function UserInfo() {
                 setNewNickname(e.target.value);
                 setError("");
               }}
-              maxLength={20}
+              maxLength={15}
             />
 
             {error && <p className="error">{error}</p>}

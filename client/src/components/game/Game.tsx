@@ -18,8 +18,8 @@ function Game() {
 
   const sizes = [
     {
-      size: "2x2",
-      value: 4,
+      size: "4x4",
+      value: 16,
     },
     {
       size: "5x4",
@@ -70,18 +70,15 @@ function Game() {
   };
 
   const handleChangeLevelsCompleted = () => {
-    const levelsCompletedStr = user.levelsCompleted;
+    setUser((prev: UserType) => {
+      const updatedUser = {
+        ...prev,
+        levelsCompleted: prev.levelsCompleted + 1,
+      };
+      updateUserDataDB(updatedUser);
 
-    if (levelsCompletedStr) {
-      const levelsCompleted = (parseInt(levelsCompletedStr) + 1).toString();
-
-      setUser((prev: UserType) => {
-        const updatedUser = { ...prev, levelsCompleted: levelsCompleted };
-        updateUserDataDB(updatedUser);
-
-        return updatedUser;
-      });
-    }
+      return updatedUser;
+    });
   };
 
   useEffect(() => {

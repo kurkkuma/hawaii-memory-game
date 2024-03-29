@@ -20,7 +20,7 @@ app.post("/create-user", async (req, res) => {
     const newUser = await prisma.user.create({
       data: {
         nickname: nickname,
-        levelsCompleted: "0",
+        levelsCompleted: 0,
       },
     });
 
@@ -62,6 +62,22 @@ app.post("/update-user", async (req, res) => {
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).send("Error updating user");
+  }
+});
+
+app.get("/best-players", async (req, res) => {
+  try {
+    const bestPlayers = await prisma.user.findMany({
+      orderBy: {
+        levelsCompleted: "desc",
+      },
+      take: 15,
+    });
+
+    res.status(200).json(bestPlayers);
+  } catch (error) {
+    console.error("Error getting best players:", error);
+    res.status(500).send("Error getting best players");
   }
 });
 

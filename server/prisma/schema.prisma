@@ -14,5 +14,5 @@ datasource db {
 model User {
   id    Int     @id @default(autoincrement())
   nickname  String  @unique
-  levelsCompleted String
+  levelsCompleted Int
 }
