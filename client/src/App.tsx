@@ -47,8 +47,8 @@ function App() {
   const [showRating, setShowRating] = useState(false);
   const effectRan = useRef(false);
   const api = axios.create({
-    baseURL: "https://hawaii-memory-game.onrender.com",
-    // baseURL: "http://localhost:8080",
+    // baseURL: "https://hawaii-memory-game.onrender.com",
+    baseURL: "http://localhost:8080",
   });
 
   function createNickname() {
