@@ -6,7 +6,6 @@ const app = express();
 const port = 8080;
 const prisma = new PrismaClient();
 
-app.use(cors());
 app.use(
   cors({
     origin: "https://hawaii-memory-game.netlify.app/",
