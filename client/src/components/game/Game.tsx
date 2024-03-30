@@ -16,8 +16,8 @@ function Game() {
 
   const sizes = [
     {
-      size: "2x2",
-      value: 4,
+      size: "4x4",
+      value: 16,
     },
     {
       size: "5x4",

@@ -44,7 +44,7 @@ app.get("/user/:id", async (req, res) => {
       res.status(200).json(existingUser);
     } else {
       console.log("Did not find a user with this ID");
-      res.status(500).send("Did not find a user with this ID");
+      res.status(404).send("Did not find a user with this ID");
     }
   } catch (error) {
     console.error("Error getting user:", error);
@@ -134,40 +134,6 @@ app.put("/update-nickname", async (req, res) => {
   } catch (error) {
     console.error("Error updating user nickname:", error);
     res.status(500).send("Error updating nickname");
-  }
-});
-
-app.post("/update-user", async (req, res) => {
-  const { id, nickname, levelsCompleted } = req.body;
-
-  try {
-    const existingUser = await prisma.user.findUnique({
-      where: { nickname: nickname },
-    });
-
-    if (existingUser && existingUser.id !== id) {
-      console.log("Nickname must be unique");
-      return res.status(201).json({ message: "Nickname must be unique" });
-    }
-  } catch (error) {
-    console.error("Error finding user with the same nickname:", error);
-    res.status(500).send("Error finding user with the same nickname");
-  }
-
-  try {
-    const updatedUser = await prisma.user.update({
-      where: { id: id },
-      data: {
-        nickname: nickname,
-        levelsCompleted: levelsCompleted,
-      },
-    });
-    console.log(updatedUser);
-
-    res.json(updatedUser);
-  } catch (error) {
-    console.error("Error updating user:", error);
-    res.status(500).send("Error updating user");
   }
 });
 

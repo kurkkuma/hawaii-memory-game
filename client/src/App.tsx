@@ -49,9 +49,8 @@ function App() {
   const [showRating, setShowRating] = useState(false);
   const effectRan = useRef(false);
   const api = axios.create({
-    baseURL: "http://localhost:8080",
-
-    // baseURL: "https://hawaii-memory-game-server-2.onrender.com",
+    // baseURL: "http://localhost:8080",
+    baseURL: "https://hawaii-memory-game-server-2.onrender.com",
   });
 
   function createNickname() {
@@ -110,10 +109,14 @@ function App() {
   const getUserDataDB = async (id: string) => {
     try {
       const res = await axios.get(`${api.defaults.baseURL}/user/${id}`);
+
       return res.data;
     } catch (error) {
-      console.error("Error getting user: ", error);
-      throw error;
+      if (error) {
+        localStorage.removeItem("userId");
+        location.reload();
+        getUser();
+      }
     }
   };
 
