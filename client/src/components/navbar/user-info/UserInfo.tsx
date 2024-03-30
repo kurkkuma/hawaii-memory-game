@@ -3,8 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../App";
 
 function UserInfo() {
-  const { user, setUser, setShowRating, updateUserDataDB } =
-    useContext(AppContext);
+  const { user, setShowRating, updateNicknameDataDB } = useContext(AppContext);
   const [isChanging, setIsChanging] = useState(false);
   const [newNickname, setNewNickname] = useState<string>(user.nickname);
   const [error, setError] = useState<string>("");
@@ -14,14 +13,9 @@ function UserInfo() {
       newNickname.trim().length > 0 &&
       newNickname.trim() !== user.nickname.trim()
     ) {
-      const updatedUser = { ...user, nickname: newNickname };
+      const res = await updateNicknameDataDB(user.id, newNickname);
 
-      const res = await updateUserDataDB(updatedUser);
-
-      if (res) {
-        setUser(updatedUser);
-        setIsChanging(false);
-      } else {
+      if (!res) {
         setError("That nickname is already taken.");
       }
     } else if (newNickname.trim() === user.nickname) {

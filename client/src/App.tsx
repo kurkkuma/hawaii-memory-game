@@ -22,7 +22,8 @@ interface UserContextType {
   setShowRating: any;
   setUser: any;
   setWon: any;
-  updateUserDataDB: any;
+  updateNicknameDataDB: any;
+  updateLevelsCompletedDataDB: any;
 }
 
 export const AppContext = createContext<UserContextType>({
@@ -33,7 +34,8 @@ export const AppContext = createContext<UserContextType>({
   setShowRating: () => {},
   setUser: () => {},
   setWon: () => {},
-  updateUserDataDB: () => {},
+  updateNicknameDataDB: () => {},
+  updateLevelsCompletedDataDB: () => {},
 });
 
 function App() {
@@ -57,24 +59,40 @@ function App() {
     return nickname;
   }
 
-  const updateUserDataDB = async (updatedUser: UserType) => {
-    // try {
-    //   const res = await axios.post(`${api.defaults.baseURL}/update-user`, {
-    //     id: updatedUser.id,
-    //     nickname: updatedUser.nickname,
-    //     levelsCompleted: updatedUser.levelsCompleted,
-    //   });
-    //   if (res.status === 200) {
-    //     localStorage.setItem("user", JSON.stringify(res.data));
-    //     return true;
-    //   }
-    //   if (res.status === 201) {
-    //     return false;
-    //   }
-    // } catch (err) {
-    //   console.error("Error: ", err);
-    //   throw err;
-    // }
+  const updateNicknameDataDB = async (id: string, newNickname: string) => {
+    try {
+      const res = await axios.put(`${api.defaults.baseURL}/update-nickname`, {
+        id,
+        newNickname,
+      });
+
+      if (res.status === 200) {
+        setUser(res.data);
+        return true;
+      }
+      if (res.status === 201) {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error updating user nickname: ", error);
+      throw error;
+    }
+  };
+
+  const updateLevelsCompletedDataDB = async (id: string) => {
+    try {
+      const res = await axios.put(`${api.defaults.baseURL}/update-levels`, {
+        id,
+      });
+
+      if (res.status === 200) {
+        setUser(res.data);
+        return;
+      }
+    } catch (error) {
+      console.error("Error updating user levels completed: ", error);
+      throw error;
+    }
   };
 
   const createUserDataDB = async (nickname: string) => {
@@ -155,7 +173,8 @@ function App() {
         setUser,
         setWon,
         setShowRating,
-        updateUserDataDB,
+        updateNicknameDataDB,
+        updateLevelsCompletedDataDB,
       }}
     >
       <div className="main-container">

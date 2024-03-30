@@ -70,6 +70,73 @@ app.post("/create-user", async (req, res) => {
   }
 });
 
+app.put("/update-levels", async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingUser) {
+      console.log("User not found");
+      return res.status(404).send("User not found");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: id },
+      data: {
+        levelsCompleted: {
+          increment: 1,
+        },
+      },
+    });
+
+    console.log("User levels updated:", updatedUser);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user levels:", error);
+    res.status(500).send("Error updating levels");
+  }
+});
+
+app.put("/update-nickname", async (req, res) => {
+  const { id, newNickname } = req.body;
+
+  try {
+    const existingUserWithNickname = await prisma.user.findUnique({
+      where: { nickname: newNickname },
+    });
+
+    if (existingUserWithNickname && existingUserWithNickname.id !== id) {
+      console.log("Nickname must be unique");
+      return res.status(201).json({ message: "Nickname must be unique" });
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingUser) {
+      console.log("User not found");
+      return res.status(404).send("User not found");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: id },
+      data: {
+        nickname: newNickname,
+      },
+    });
+
+    console.log("User nickname updated:", updatedUser);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user nickname:", error);
+    res.status(500).send("Error updating nickname");
+  }
+});
+
 app.post("/update-user", async (req, res) => {
   const { id, nickname, levelsCompleted } = req.body;
 

@@ -4,8 +4,6 @@ import cardImages from "../../../data.ts";
 import Card from "./card/Card.tsx";
 import { AppContext } from "../../App.tsx";
 
-import { UserType } from "../../App.tsx";
-
 export type CardType = {
   src: string;
   matched: boolean;
@@ -13,13 +11,13 @@ export type CardType = {
 };
 
 function Game() {
-  const { user, won, setUser, setWon, updateUserDataDB } =
+  const { user, won, setWon, updateLevelsCompletedDataDB } =
     useContext(AppContext);
 
   const sizes = [
     {
-      size: "4x4",
-      value: 16,
+      size: "2x2",
+      value: 4,
     },
     {
       size: "5x4",
@@ -69,18 +67,6 @@ function Game() {
     shuffleCards(value / 2);
   };
 
-  const handleChangeLevelsCompleted = () => {
-    setUser((prev: UserType) => {
-      const updatedUser = {
-        ...prev,
-        levelsCompleted: prev.levelsCompleted + 1,
-      };
-      updateUserDataDB(updatedUser);
-
-      return updatedUser;
-    });
-  };
-
   useEffect(() => {
     if (choiceOne && choiceTwo) {
       setDisabled(true);
@@ -107,7 +93,7 @@ function Game() {
 
       if (allMatched && !won) {
         setWon(true);
-        handleChangeLevelsCompleted();
+        updateLevelsCompletedDataDB(user.id);
       }
     }
   }, [cards, choiceTwo, won]);
