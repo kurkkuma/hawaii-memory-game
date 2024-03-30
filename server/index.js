@@ -31,6 +31,27 @@ app.get("/", (req, res) => {
   res.send("🌺 Hawaii Memory Game Server 🌺");
 });
 
+app.get("/user/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (existingUser) {
+      console.log("existing user: ", existingUser);
+      res.status(200).json(existingUser);
+    } else {
+      console.log("Did not find a user with this ID");
+      res.status(500).send("Did not find a user with this ID");
+    }
+  } catch (error) {
+    console.error("Error getting user:", error);
+    res.status(500).send("Error getting user");
+  }
+});
+
 app.post("/create-user", async (req, res) => {
   const { nickname } = req.body;
 

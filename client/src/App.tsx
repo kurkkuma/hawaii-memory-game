@@ -10,7 +10,7 @@ import cardImages from "../data.ts";
 import Rating from "./components/navbar/rating/Rating.tsx";
 
 export type UserType = {
-  id: number;
+  id: string;
   nickname: string;
   levelsCompleted: number;
 };
@@ -27,7 +27,7 @@ interface UserContextType {
 
 export const AppContext = createContext<UserContextType>({
   api: {},
-  user: { id: 0, nickname: "", levelsCompleted: 0 },
+  user: { id: "", nickname: "", levelsCompleted: 0 },
   won: false,
   showRating: false,
   setShowRating: () => {},
@@ -38,7 +38,7 @@ export const AppContext = createContext<UserContextType>({
 
 function App() {
   const [user, setUser] = useState<UserType>({
-    id: 0,
+    id: "",
     nickname: "",
     levelsCompleted: 0,
   });
@@ -47,9 +47,9 @@ function App() {
   const [showRating, setShowRating] = useState(false);
   const effectRan = useRef(false);
   const api = axios.create({
-    // baseURL: "https://hawaii-memory-game.onrender.com",
-    // baseURL: "http://localhost:8080",
-    baseURL: "https://hawaii-memory-game-server-2.onrender.com",
+    baseURL: "http://localhost:8080",
+
+    // baseURL: "https://hawaii-memory-game-server-2.onrender.com",
   });
 
   function createNickname() {
@@ -58,24 +58,23 @@ function App() {
   }
 
   const updateUserDataDB = async (updatedUser: UserType) => {
-    try {
-      const res = await axios.post(`${api.defaults.baseURL}/update-user`, {
-        id: updatedUser.id,
-        nickname: updatedUser.nickname,
-        levelsCompleted: updatedUser.levelsCompleted,
-      });
-
-      if (res.status === 200) {
-        localStorage.setItem("user", JSON.stringify(res.data));
-        return true;
-      }
-      if (res.status === 201) {
-        return false;
-      }
-    } catch (err) {
-      console.error("Error: ", err);
-      throw err;
-    }
+    // try {
+    //   const res = await axios.post(`${api.defaults.baseURL}/update-user`, {
+    //     id: updatedUser.id,
+    //     nickname: updatedUser.nickname,
+    //     levelsCompleted: updatedUser.levelsCompleted,
+    //   });
+    //   if (res.status === 200) {
+    //     localStorage.setItem("user", JSON.stringify(res.data));
+    //     return true;
+    //   }
+    //   if (res.status === 201) {
+    //     return false;
+    //   }
+    // } catch (err) {
+    //   console.error("Error: ", err);
+    //   throw err;
+    // }
   };
 
   const createUserDataDB = async (nickname: string) => {
@@ -84,24 +83,34 @@ function App() {
         nickname,
       });
       return res.data;
-    } catch (err) {
-      console.error("Error: ", err);
-      throw err;
+    } catch (error) {
+      console.error("Error creating user: ", error);
+      throw error;
+    }
+  };
+
+  const getUserDataDB = async (id: string) => {
+    try {
+      const res = await axios.get(`${api.defaults.baseURL}/user/${id}`);
+      return res.data;
+    } catch (error) {
+      console.error("Error getting user: ", error);
+      throw error;
     }
   };
 
   async function getUser() {
-    const existedUser = localStorage.getItem("user");
+    const userId = localStorage.getItem("userId");
 
-    if (!existedUser) {
-      const dataFromDB = await createUserDataDB(createNickname());
-      localStorage.setItem("user", JSON.stringify(dataFromDB));
-      setUser(dataFromDB);
+    if (!userId) {
+      const newUser = await createUserDataDB(createNickname());
+      localStorage.setItem("userId", JSON.stringify(newUser.id));
+      setUser(newUser);
       return;
     }
 
-    const parsedUser = JSON.parse(existedUser);
-    setUser(parsedUser);
+    const existingUser = await getUserDataDB(JSON.parse(userId));
+    setUser(existingUser);
     return;
   }
 
@@ -127,7 +136,7 @@ function App() {
         .then(() => setImgsLoaded(true))
         .catch((err) => console.log("Failed to load images", err));
 
-      if (user.id === 0 && !user.nickname && !user.levelsCompleted) {
+      if (!user.id && !user.nickname && !user.levelsCompleted) {
         getUser();
       }
       return () => {
