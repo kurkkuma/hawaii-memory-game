@@ -45,6 +45,7 @@ function App() {
     levelsCompleted: 0,
   });
   const [won, setWon] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [imgsLoaded, setImgsLoaded] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const effectRan = useRef(false);
@@ -166,6 +167,12 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (user.nickname && user.id && imgsLoaded) {
+      setIsLoading(false);
+    }
+  }, [user, imgsLoaded]);
+
   return (
     <AppContext.Provider
       value={{
@@ -182,9 +189,8 @@ function App() {
     >
       <div className="main-container">
         <Rating />
-
         <Navbar />
-        {imgsLoaded ? <Game /> : <Loader />}
+        {isLoading ? <Loader /> : <Game />}
         {won && (
           <Confetti width={window.innerWidth} height={window.innerHeight} />
         )}

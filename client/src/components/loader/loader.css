@@ -10,6 +10,21 @@
   height: auto;
   margin-bottom: 1rem;
 }
-.loader-container p {
+.loading-title {
   font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.loading-info {
+  padding: 0.5rem 0.2rem;
+  background-color: rgba(39, 133, 180, 0.41);
+  text-align: center;
+  width: 30rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+@media (max-width: 425px) {
+  .loading-info {
+    width: 20rem;
+  }
 }
