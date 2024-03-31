@@ -51,7 +51,8 @@ function App() {
   const effectRan = useRef(false);
   const api = axios.create({
     // baseURL: "http://localhost:8080",
-    baseURL: "https://hawaii-memory-game-server-2.onrender.com",
+    // baseURL: "https://hawaii-memory-game-server-2.onrender.com",
+    baseURL: "https://hawaii-memory-game-server.cyclic.app",
   });
 
   function createNickname() {
